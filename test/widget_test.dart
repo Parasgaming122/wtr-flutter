@@ -1,3 +1,4 @@
+
 // This is a basic Flutter widget test.
 //
 // To perform an interaction with a widget in your test, use the WidgetTester
@@ -11,20 +12,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:myapp/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('WTR Lab Reader smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const WtrLabReaderApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // The app starts with a loading indicator while it loads the state.
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Wait for the app to finish initializing.
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // After initialization, verify that the main UI components are present.
+    expect(find.byType(TabBarWidget), findsOneWidget);
+    expect(find.byType(WebViewStack), findsOneWidget);
+
+    // Verify the initial "wtr-lab" tab is present.
+    expect(find.text('wtr-lab'), findsOneWidget);
+
+    // Verify the main control buttons are on the screen.
+    expect(find.byIcon(Icons.history), findsOneWidget);
+    expect(find.byIcon(Icons.add), findsOneWidget);
   });
 }
