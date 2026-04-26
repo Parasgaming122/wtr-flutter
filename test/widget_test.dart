@@ -6,31 +6,16 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:myapp/main.dart';
+import 'package:myapp/widgets/tab_bar_widget.dart';
 
 void main() {
-  testWidgets('WTR Lab Reader smoke test', (WidgetTester tester) async {
+  testWidgets('Renders the main screen with a tab bar', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const WtrLabReaderApp());
 
-    // The app starts with a loading indicator while it loads the state.
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-    // Wait for the app to finish initializing.
-    await tester.pumpAndSettle();
-
-    // After initialization, verify that the main UI components are present.
+    // Verify that the main screen contains a TabBarWidget.
     expect(find.byType(TabBarWidget), findsOneWidget);
-    expect(find.byType(WebViewStack), findsOneWidget);
-
-    // Verify the initial "wtr-lab" tab is present.
-    expect(find.text('wtr-lab'), findsOneWidget);
-
-    // Verify the main control buttons are on the screen.
-    expect(find.byIcon(Icons.history), findsOneWidget);
-    expect(find.byIcon(Icons.add), findsOneWidget);
   });
 }

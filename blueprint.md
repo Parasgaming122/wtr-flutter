@@ -1,60 +1,34 @@
 
-# Blueprint: WTR Lab Reader (Flutter Port)
+# WTR Lab Reader Blueprint
 
-## 1. Overview
+## Overview
 
-This document outlines the architecture and implementation of the "WTR Lab Reader" application, which was ported from React Native to Flutter. The app functions as a specialized web browser for `wtr-lab.com`, enhanced with background-capable text-to-speech (TTS) functionality, persistent tabs, and browsing history.
+A web-based text-to-speech (TTS) reader with a rich feature set designed for an optimal reading experience. The application allows users to listen to web content, manage multiple tabs, and access a history of visited pages.
 
-## 2. Core Features
+## Style, Design, and Features
 
-- **Tabbed Browsing:** A dynamic UI that allows users to create, switch between, and close multiple web tabs.
-- **WebView with JS Bridge:** Each tab contains a `WebView` that loads web content. A JavaScript bridge (`TTSChannel`) facilitates two-way communication between the Flutter host and the web page's JavaScript environment.
-- **Native Text-to-Speech (TTS):** The app intercepts speech synthesis commands from the web page and handles them using the native `flutter_tts` engine, allowing for a seamless audio experience.
-- **State Persistence:** The application state, including all open tabs, the currently active tab, and the user's browsing history, is automatically saved to local storage (`SharedPreferences`) and restored when the app restarts.
-- **Background Audio:** The app can continue playing TTS audio even when minimized or when the screen is off. This is achieved by playing a silent audio track in a loop using `just_audio`, which keeps the app's service alive.
-- **History View:** A modal dialog provides a view of the user's browsing history. Users can revisit pages from their history, which open in a new tab.
+### Initial Version
 
-## 3. Architecture & Implementation
+*   **Core Functionality:** Web page rendering and text-to-speech conversion.
+*   **User Interface:** A simple, intuitive interface with a tab bar for managing multiple web pages and playback controls for the TTS functionality.
+*   **State Management:** The `provider` package is used for state management, ensuring a clear separation of concerns and a scalable architecture.
+*   **Asynchronous Operations:** The application handles asynchronous operations, such as loading web pages and interacting with the TTS engine, in a robust and efficient manner.
 
-### State Management (Provider)
+### Current Version
 
-The application's state is centrally managed by the `AppState` class, which uses the `ChangeNotifier` pattern. This class is provided to the entire widget tree via `ChangeNotifierProvider`.
+*   **Playback Controls:** The application now features a dedicated widget for controlling TTS playback, including play, pause, and stop functionality.
+*   **History Panel:** A side panel has been added to display a history of visited pages. Users can easily access this panel to revisit previous content.
+*   **History Search:** The history panel now includes a search bar, allowing users to filter their browsing history.
+*   **UI Enhancements:** The tab bar has been updated to include a button for accessing the history panel, and the overall layout has been refined for a more polished user experience.
+*   **Theming:** The application now supports both light and dark themes, with a toggle switch in the tab bar to switch between them. The theme is based on Material Design 3 and uses the `google_fonts` package for custom fonts.
+*   **Testability:** The application has been refactored to improve testability, including the ability to disable silent audio during tests and mock the `WebViewStack` widget.
 
-- **`AppState` Responsibilities:**
-  - Managing the list of `Tab` objects (`_tabs`).
-  - Tracking the active tab ID (`_activeTabId`).
-  - Maintaining the browsing history list (`_history`).
-  - Handling all business logic for adding, closing, and updating tabs.
-  - Interacting with `SharedPreferences` to save and load the application state.
-  - Initializing and managing the `FlutterTts` and `AudioPlayer` instances.
+## Plan
 
-### UI Structure
-
-The UI is built with a clean separation of components:
-
-- **`MainScreen`:** The primary view, which uses a `Column` to house the `TabBarWidget` and the `WebViewStack`.
-- **`TabBarWidget`:** A `Row` containing a history button, a horizontally scrolling `ListView` of tabs, and a new-tab button. It reads data directly from `AppState` to render the tabs and their active states.
-- **`WebViewStack`:** A `Stack` that contains a `WebViewWidget` for each tab. The `Offstage` widget is used to efficiently show only the active tab's WebView, while keeping the others in the widget tree but not rendering them.
-
-### WebView & JavaScript Bridge
-
-- **`WebViewController`:** Each `Tab` object holds an instance of a `WebViewController`. This controller is configured with `JavaScriptMode.unrestricted`.
-- **`TTSChannel`:** A `JavaScriptChannel` named `TTSChannel` is added to each WebView. This channel's `onMessageReceived` callback is the entry point for all messages sent from the web page to the Flutter app.
-- **Bridge JavaScript (`bridgeJS`):** A multi-line string containing JavaScript code is injected into the WebView on every `onPageFinished` event. This script:
-  - Polyfills `window.speechSynthesis` and `window.SpeechSynthesisUtterance` to mimic the standard Web Speech API.
-  - Intercepts calls to `speechSynthesis.speak()`, `pause()`, `resume()`, and `cancel()`.
-  - Bundles the TTS command and its parameters into a JSON string and sends it to the Flutter host via `TTSChannel.postMessage()`.
-  - Defines global callback functions (`window.__ttsDidEnd`, `window.__ttsDidError`) that the Flutter app can invoke to notify the web page of TTS completion or errors.
-
-### Platform-Specific Configuration
-
-- **Android (`AndroidManifest.xml` & `build.gradle.kts`):
-  - Permissions: `INTERNET`, `WAKE_LOCK`, and `FOREGROUND_SERVICE` are declared to allow network access and ensure the app can run in the background.
-  - `minSdk` is set to 21 to support a wide range of devices.
-
-- **iOS (`Info.plist`):
-  - `UIBackgroundModes`: The `audio` key is added to this array, declaring that the app provides background audio services. This is essential for the silent audio track to keep the app alive.
-
-## 4. Final Application Code (`lib/main.dart`)
-
-The complete, final source code for the application is contained within `lib/main.dart`.
+1.  **Implement Playback Controls:** Create a new widget for controlling TTS playback, including play, pause, and stop functionality.
+2.  **Add History Panel:** Implement a side panel to display a history of visited pages.
+3.  **Update UI:** Integrate the new widgets into the main screen and refine the overall layout.
+4.  **Improve Testability:** Refactor the application to improve testability, including the ability to disable silent audio during tests and mock the `WebViewStack` widget.
+5.  **Add Theming:** Implement light and dark themes with a user-facing toggle.
+6.  **Add History Search:** Add a search bar to the history panel to allow users to search their browsing history.
+7.  **Bug Fixes:** Fixed errors related to theme, history search, unused imports, and broken tests.

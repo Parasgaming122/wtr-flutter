@@ -39,6 +39,7 @@ dependencies:
   flutter_tts: ^4.2.5
   shared_preferences: ^2.5.5
   just_audio: ^0.10.5
+  google_fonts: ^8.0.2
 
 dev_dependencies:
   flutter_test:
