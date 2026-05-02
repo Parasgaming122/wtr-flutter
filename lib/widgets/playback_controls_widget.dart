@@ -23,7 +23,7 @@ class PlaybackControlsWidget extends StatelessWidget {
               final text = await appState.activeTab?.controller
                   ?.runJavaScriptReturningResult('document.body.innerText');
               if (text != null) {
-                tts.speak(text.toString());
+                appState.speak(text.toString());
               }
             },
           ),

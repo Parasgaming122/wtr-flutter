@@ -1,14 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 const Color primarySeedColor = Colors.deepPurple;
 
 // Define a common TextTheme
-final TextTheme appTextTheme = TextTheme(
-  displayLarge: GoogleFonts.oswald(fontSize: 57, fontWeight: FontWeight.bold),
-  titleLarge: GoogleFonts.roboto(fontSize: 22, fontWeight: FontWeight.w500),
-  bodyMedium: GoogleFonts.openSans(fontSize: 14),
+final TextTheme appTextTheme = const TextTheme(
+  displayLarge: TextStyle(fontFamily: 'Oswald', fontSize: 57, fontWeight: FontWeight.bold),
+  titleLarge: TextStyle(fontFamily: 'Roboto', fontSize: 22, fontWeight: FontWeight.w500),
+  bodyMedium: TextStyle(fontFamily: 'Open Sans', fontSize: 14),
 );
 
 // Light Theme
@@ -19,10 +18,10 @@ final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
   ),
   textTheme: appTextTheme,
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: primarySeedColor,
     foregroundColor: Colors.white,
-    titleTextStyle: GoogleFonts.oswald(fontSize: 24, fontWeight: FontWeight.bold),
+    titleTextStyle: TextStyle(fontFamily: 'Oswald', fontSize: 24, fontWeight: FontWeight.bold),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -30,7 +29,7 @@ final ThemeData lightTheme = ThemeData(
       backgroundColor: primarySeedColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      textStyle: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+      textStyle: const TextStyle(fontFamily: 'Roboto', fontSize: 16, fontWeight: FontWeight.w500),
     ),
   ),
 );
@@ -43,10 +42,10 @@ final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
   ),
   textTheme: appTextTheme,
-  appBarTheme: AppBarTheme(
-    backgroundColor: Colors.grey[900],
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Colors.grey,
     foregroundColor: Colors.white,
-    titleTextStyle: GoogleFonts.oswald(fontSize: 24, fontWeight: FontWeight.bold),
+    titleTextStyle: TextStyle(fontFamily: 'Oswald', fontSize: 24, fontWeight: FontWeight.bold),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -54,7 +53,7 @@ final ThemeData darkTheme = ThemeData(
       backgroundColor: Colors.deepPurple.shade200,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      textStyle: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+      textStyle: const TextStyle(fontFamily: 'Roboto', fontSize: 16, fontWeight: FontWeight.w500),
     ),
   ),
 );

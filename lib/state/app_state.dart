@@ -20,6 +20,11 @@ class AppState with ChangeNotifier {
   bool _isReady = false;
   final bool silentAudioEnabled;
 
+  // TTS Configuration State
+  String? _currentTtsLang;
+  double _currentTtsPitch = 1.0;
+  double _currentTtsRate = 0.5;
+
   List<Tab> get tabs => _tabs;
   int? get activeTabId => _activeTabId;
   Tab? get activeTab {
@@ -33,7 +38,7 @@ class AppState with ChangeNotifier {
   List<HistoryItem> get history => _history;
   bool get isReady => _isReady;
 
-  AppState({this.silentAudioEnabled = true}) {
+  AppState({this.silentAudioEnabled = false}) {
     _init();
   }
 
@@ -54,6 +59,31 @@ class AppState with ChangeNotifier {
     tts.setErrorHandler((msg) {
       activeTab?.controller?.runJavaScript('window.__ttsDidError("$msg");');
     });
+  }
+
+  Future<void> speak(String text, {String? lang, double? pitch, double? rate}) async {
+    lang ??= 'en-US';
+    pitch ??= 1.0;
+    rate ??= 0.5;
+
+    try {
+      if (_currentTtsLang != lang) {
+        await tts.setLanguage(lang);
+        _currentTtsLang = lang;
+      }
+      if (_currentTtsPitch != pitch) {
+        await tts.setPitch(pitch);
+        _currentTtsPitch = pitch;
+      }
+      if (_currentTtsRate != rate) {
+        await tts.setSpeechRate(rate);
+        _currentTtsRate = rate;
+      }
+      await tts.speak(text);
+    } catch (e, s) {
+      developer.log("TTS Error", name: 'wtr_lab_reader.tts', error: e, stackTrace: s);
+      rethrow;
+    }
   }
 
   Future<void> _initSilentAudio() async {
@@ -148,7 +178,13 @@ class AppState with ChangeNotifier {
     try {
       if (prefs.containsKey('tabs')) {
         final List<dynamic> tabMaps = jsonDecode(prefs.getString('tabs')!);
-        _tabs = tabMaps.map((map) => Tab.fromMap(map)).toList();
+        _tabs = tabMaps.map((map) {
+          final tab = Tab.fromMap(map);
+          if (tab.url == 'about:blank') {
+            tab.url = homeUrl;
+          }
+          return tab;
+        }).toList();
       }
       if (prefs.containsKey('active_tab_id')) {
         _activeTabId = prefs.getInt('active_tab_id');

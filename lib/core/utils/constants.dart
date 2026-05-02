@@ -1,1 +1,1 @@
-const String homeUrl = 'about:blank';
+const String homeUrl = 'https://wtr-lab.com/en';

@@ -22,6 +22,7 @@ A web-based text-to-speech (TTS) reader with a rich feature set designed for an 
 *   **UI Enhancements:** The tab bar has been updated to include a button for accessing the history panel, and the overall layout has been refined for a more polished user experience.
 *   **Theming:** The application now supports both light and dark themes, with a toggle switch in the tab bar to switch between them. The theme is based on Material Design 3 and uses the `google_fonts` package for custom fonts.
 *   **Testability:** The application has been refactored to improve testability, including the ability to disable silent audio during tests and mock the `WebViewStack` widget.
+*   **Performance:** The text-to-speech functionality has been optimized to prevent unnecessary reconfiguration of the TTS engine, resulting in a smoother and more responsive user experience.
 
 ## Plan
 
@@ -32,3 +33,4 @@ A web-based text-to-speech (TTS) reader with a rich feature set designed for an 
 5.  **Add Theming:** Implement light and dark themes with a user-facing toggle.
 6.  **Add History Search:** Add a search bar to the history panel to allow users to search their browsing history.
 7.  **Bug Fixes:** Fixed errors related to theme, history search, unused imports, and broken tests.
+8.  **Performance Optimization:** Optimized the text-to-speech functionality to prevent unnecessary reconfiguration of the TTS engine.
