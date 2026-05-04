@@ -164,10 +164,12 @@ class _WebViewStackState extends State<WebViewStack> {
 
     switch (data['type']) {
       case 'TTS_SPEAK':
-        appState.tts.setLanguage(data['lang'] ?? 'en-US');
-        appState.tts.setPitch(data['pitch']?.toDouble() ?? 1.0);
-        appState.tts.setSpeechRate((data['rate']?.toDouble() ?? 1.0) * 5.0);
-        appState.tts.speak(data['text']);
+        appState.speak(
+          data['text'],
+          lang: data['lang'],
+          pitch: data['pitch']?.toDouble(),
+          rate: (data['rate']?.toDouble() ?? 1.0) * 0.5, // The * 5.0 was making it too fast
+        );
         break;
       case 'TTS_CANCEL':
         appState.tts.stop();
@@ -178,7 +180,7 @@ class _WebViewStackState extends State<WebViewStack> {
       case 'TTS_RESUME':
         // flutter_tts does not have a resume, so we just speak again
         // This is not ideal, but it's the best we can do with the library
-        appState.tts.speak(data['text']);
+        appState.speak(data['text']);
         break;
     }
   }

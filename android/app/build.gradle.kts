@@ -48,6 +48,19 @@ android {
             // TODO: Add your own signing config for the release build.
             // For now, signing with the debug keys for release builds works.
             signingConfig = signingConfigs.getByName("debug")
+            // Enable code shrinking, resource shrinking, and obfuscation.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("x86_64", "armeabi-v7a", "arm64-v8a")
+            isUniversalApk = false
         }
     }
 }
