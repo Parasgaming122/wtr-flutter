@@ -54,9 +54,11 @@ class AppState with ChangeNotifier {
 
   void _initTts() {
     tts.setCompletionHandler(() {
+      if (silentAudioEnabled) silentPlayer.play();
       activeTab?.controller?.runJavaScript('window.__ttsDidEnd();');
     });
     tts.setErrorHandler((msg) {
+      if (silentAudioEnabled) silentPlayer.play();
       activeTab?.controller?.runJavaScript('window.__ttsDidError("$msg");');
     });
   }
@@ -65,6 +67,8 @@ class AppState with ChangeNotifier {
     lang ??= 'en-US';
     pitch ??= 1.0;
     rate ??= 0.5;
+
+    if (silentAudioEnabled) await silentPlayer.pause();
 
     try {
       if (_currentTtsLang != lang) {
@@ -82,6 +86,7 @@ class AppState with ChangeNotifier {
       await tts.speak(text);
     } catch (e, s) {
       developer.log("TTS Error", name: 'wtr_lab_reader.tts', error: e, stackTrace: s);
+      if (silentAudioEnabled) await silentPlayer.play();
       rethrow;
     }
   }
