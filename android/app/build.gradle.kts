@@ -54,15 +54,6 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include("x86_64", "armeabi-v7a", "arm64-v8a")
-            isUniversalApk = false
-        }
-    }
 }
 
 flutter {
